@@ -14,25 +14,53 @@
 
 
 
-var x = 0;
-var s;
+var style;
 
+// Turn Dark mode on or off
+function darkmode(on)
+{
+    if(on) {
+        style = GM_addStyle(`
+            html {
+                filter: invert(100%) hue-rotate(180deg);
+            }
+            img, video, iframe {
+                filter: invert(100%) hue-rotate(180deg);
+            }
+        `);
+        console.log(style);
+    } else {
+        style.remove();
+        style = null;
+    }
+}
+
+
+
+// Check if dark mode should be enabled
+if (localStorage.darkmode) {
+    darkmode(1);
+}
+
+// Synchronize on tab change
+document.addEventListener('visibilitychange', e => {
+    if (localStorage.darkmode && !style) {
+        darkmode(1);
+    }
+    if (!localStorage.darkmode && style) {
+        darkmode(0);
+    }
+});
+
+// Toggle when pressing Ctrl+`
 document.addEventListener('keydown', e => {
     if (e.ctrlKey && e.key === '`') {
-        if (x == 0) {
-            x = 1;
-            s = GM_addStyle(`
-                html {
-                    filter: invert(100%) hue-rotate(180deg);
-                }
-                img, video, iframe {
-                    filter: invert(100%) hue-rotate(180deg);
-                }
-            `);
+        if (!localStorage.darkmode) {
+            localStorage.darkmode = 1;
+            darkmode(1);
         } else {
-            x = 0;
-            s.remove();
+            delete localStorage.darkmode;
+            darkmode(0);
         }
-        console.log(s);
     }
 });
