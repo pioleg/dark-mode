@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Dark mode
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1.0
 // @description  Invert color of the page
 // @author       PioLeg
 // @match        *://*/*
@@ -24,7 +24,7 @@ function darkmode(on)
             html {
                 filter: invert(100%) hue-rotate(180deg);
             }
-            img, video, iframe {
+            img, video, iframe, *[background-image] {
                 filter: invert(100%) hue-rotate(180deg);
             }
         `);
