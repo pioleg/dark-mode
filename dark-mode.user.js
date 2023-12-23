@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Dark mode
 // @namespace    http://tampermonkey.net/
-// @version      1.1.1
+// @version      1.2.1
 // @description  Invert color of the page
 // @author       PioLeg
 // @match        *://*/*
@@ -15,20 +15,39 @@
 
 
 var style;
+var css = {
+html:`
+html {
+    filter: invert(100%) hue-rotate(180deg);
+}`,
+img:`
+html img {
+    filter: invert(100%) hue-rotate(180deg);
+}`,
+video:`
+video {
+    filter: invert(100%) hue-rotate(180deg);
+}`,
+iframe:`
+iframe {
+    filter: invert(100%) hue-rotate(180deg);
+}`,
+wikipedia:`
+.mwe-math-element img {
+    filter: none;
+}`
+}
 
 // Turn Dark mode on or off
 function darkmode(on)
 {
     const nodeList = document.querySelectorAll('[style*="background-image"]');
     if(on) {
-        style = GM_addStyle(`
-            html {
-                filter: invert(100%) hue-rotate(180deg);
-            }
-            img, video, iframe {
-                filter: invert(100%) hue-rotate(180deg);
-            }
-        `);
+        if (window.location.hostname.endsWith('wikipedia.org')) {
+            style = GM_addStyle(css.html+css.img+css.video+css.iframe+css.wikipedia);
+        } else {
+           style = GM_addStyle(css.html+css.img+css.video+css.iframe);
+        }
         for (let i = 0; i < nodeList.length; i++) {
             nodeList[i].style.filter += "invert(100%) hue-rotate(180deg)";
         }
