@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Dark mode
 // @namespace    http://tampermonkey.net/
-// @version      1.2.4
+// @version      1.2.5
 // @description  Invert color of the page
 // @author       PioLeg
 // @match        *://*/*
@@ -35,6 +35,9 @@ iframe {
 wikipedia:`
 .mwe-math-element img, span img.mw-file-element {
     filter: none;
+}
+.tmulti img.mw-file-element {
+    filter: invert(100%) hue-rotate(180deg);
 }`,
 imagus:`
 body+div {
