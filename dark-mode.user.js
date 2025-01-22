@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Dark mode
 // @namespace    http://tampermonkey.net/
-// @version      1.3
+// @version      1.3.1
 // @description  Invert color of the page
 // @author       PioLeg
 // @match        *://*/*
@@ -91,8 +91,18 @@ document.addEventListener('visibilitychange', e => {
 	}
 });
 
-// Toggle when pressing Ctrl+`
 document.addEventListener('keydown', e => {
+// Toggle when pressing Ctrl+`
+	if (e.ctrlKey && e.key === '`') {
+		if (!localStorage.darkmode) {
+			localStorage.darkmode = 1;
+			darkmode(1);
+		} else {
+			delete localStorage.darkmode;
+			darkmode(0);
+		}
+	}
+// Toggle when pressing Ctrl+Shift+`
 	if (e.ctrlKey && e.key === '~') {
 		if (!pick) {
 			pick = true
@@ -112,15 +122,6 @@ document.addEventListener('keydown', e => {
 		} else {
 			pick = false
 			picker.stop();
-		}
-	}
-	if (e.ctrlKey && e.key === '`') {
-		if (!localStorage.darkmode) {
-			localStorage.darkmode = 1;
-			darkmode(1);
-		} else {
-			delete localStorage.darkmode;
-			darkmode(0);
 		}
 	}
 });
